@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>문화재돌봄 작업 위험성 평가표</title>
+<style>
+  :root {
+    --bg: #FAF3E0;
+    --header-bg: #5C3D2E;
+    --header-text: #FFF8EE;
+    --accent: #2E6B5E;
+    --accent2: #1B6CA8;
+    --border: #C4A882;
+    --card-bg: #FFFDF5;
+    --section-bg: #F0E6CC;
+    --high: #C0392B;
+    --mid: #D97B1A;
+    --low: #27AE60;
+    --high-bg: #FDECEA;
+    --mid-bg: #FEF5E4;
+    --low-bg: #EAFAF1;
+    --text: #2C1A0E;
+    --muted: #7A6048;
+    --radius: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── 헤더 ── */
+  .page-header {
+    background: var(--header-bg);
+    color: var(--header-text);
+    padding: 20px 24px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .page-header .title-kr {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .page-header .title-sub {
+    font-size: 13px;
+    opacity: 0.8;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+  .header-deco {
+    font-size: 11px;
+    opacity: 0.55;
+    margin-top: 6px;
+  }
+
+  /* ── 본문 컨테이너 ── */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+
+  /* ── 섹션 카드 ── */
+  .card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+  }
+  .card-header {
+    background: var(--section-bg);
+    border-bottom: 1.5px solid var(--border);
+    padding: 10px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--header-bg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .card-header .icon { font-size: 18px; }
+  .card-body { padding: 16px; }
+
+  /* ── 기본 정보 그리드 ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .info-grid .full { grid-column: 1 / -1; }
+  .field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+  }
+  .field-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: #FFFEF9;
+    font-size: 16px;
+    font-family: inherit;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .field-input:focus { border-color: var(--accent2); }
+  select.field-input { cursor: pointer; }
+  .work-type-group {
+    display: flex; gap: 20px; padding: 10px 14px;
+    border: 1.5px solid var(--border); border-radius: 6px;
+    background: #FFFEF9; align-items: center;
+  }
+  .work-type-label {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 16px; cursor: pointer; user-select: none;
+  }
+  .work-type-cb {
+    width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent2); flex-shrink: 0;
+  }
+
+  /* ── 작업자명 드롭다운 ── */
+  .worker-selector { position: relative; }
+  .worker-display {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 6px;
+    background: #FFFEF9; font-size: 16px; cursor: pointer; min-height: 44px;
+    color: var(--text); user-select: none; transition: border-color 0.2s;
+  }
+  .worker-display.open, .worker-display:hover { border-color: var(--accent2); }
+  .worker-display-text { flex: 1; }
+  .worker-display-text.ph { color: #aaa; }
+  .worker-arrow { color: var(--muted); font-size: 12px; margin-left: 6px; flex-shrink: 0; }
+  .worker-dropdown {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+    background: #fff; border: 1.5px solid var(--accent2); border-radius: 6px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15); z-index: 200; padding: 6px 0;
+  }
+  .worker-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 12px; cursor: pointer;
+  }
+  .worker-item:hover { background: #f5f0e8; }
+  .worker-cb { width: 18px; height: 18px; cursor: pointer; flex-shrink: 0; accent-color: var(--accent2); }
+  .worker-name { flex: 1; font-size: 15px; }
+  .worker-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 13px; padding: 2px 5px; line-height: 1.3; border-radius: 3px;
+    flex-shrink: 0; white-space: nowrap;
+  }
+  .worker-btn-sig  { color: #fff; background: var(--accent2); border-radius: 4px; font-size: 11px; font-weight: 700; }
+  .worker-btn-edit { color: var(--accent2); }
+  .worker-btn-del  { color: #c0392b; }
+  .worker-btn:hover { opacity: 0.75; }
+  .worker-empty { padding: 8px 14px; color: #aaa; font-size: 14px; }
+  .worker-add-row {
+    display: flex; gap: 6px; padding: 8px 12px 6px;
+    border-top: 1px solid var(--border); margin-top: 4px;
+  }
+  .worker-add-input {
+    flex: 1; padding: 7px 10px; border: 1.5px solid var(--border);
+    border-radius: 5px; font-size: 15px; outline: none; font-family: inherit;
+  }
+  .worker-add-input:focus { border-color: var(--accent2); }
+  .worker-add-btn {
+    padding: 7px 14px; background: var(--accent2); color: #fff;
+    border: none; border-radius: 5px; font-size: 14px; cursor: pointer; white-space: nowrap;
+  }
+  .worker-add-btn:hover { background: #1557A8; }
+
+  /* ── 위험성 평가표 ── */
+  .risk-section-title {
+    background: var(--header-bg);
+    color: var(--header-text);
+    padding: 10px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: var(--radius) var(--radius) 0 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .risk-section-title .num {
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .risk-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table.risk-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 560px;
+  }
+  .risk-table thead tr {
+    background: #EDE0C8;
+  }
+  .risk-table th {
+    padding: 10px 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--header-bg);
+    border: 1px solid var(--border);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .risk-table td {
+    padding: 10px 10px;
+    border: 1px solid var(--border);
+    vertical-align: middle;
+    font-size: 15px;
+  }
+  .risk-table tbody tr:nth-child(odd)  { background: #FFFDF6; }
+  .risk-table tbody tr:nth-child(even) { background: #F7F0E2; }
+  .risk-table tbody tr.risk-high { background: var(--high-bg) !important; }
+  .risk-table tbody tr.risk-mid  { background: var(--mid-bg)  !important; }
+  .risk-table tbody tr.risk-low  { background: var(--low-bg)  !important; }
+
+  .factor-text { font-weight: 600; min-width: 130px; }
+
+  /* 위험도 버튼 그룹 */
+  .risk-btn-group { display: flex; gap: 4px; justify-content: center; flex-wrap: nowrap; }
+  .risk-btn {
+    padding: 7px 10px;
+    border: 1.5px solid #bbb;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  .risk-btn:hover { opacity: 0.85; }
+  .risk-btn.sel-high { background: var(--high); color: #fff; border-color: var(--high); }
+  .risk-btn.sel-mid  { background: var(--mid);  color: #fff; border-color: var(--mid);  }
+  .risk-btn.sel-low  { background: var(--low);  color: #fff; border-color: var(--low);  }
+
+  /* 감소 대책 드롭다운 */
+  .measure-select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #FFFEF9;
+    color: var(--text);
+    outline: none;
+    cursor: pointer;
+    appearance: auto;
+  }
+  .measure-select:focus { border-color: var(--accent2); }
+  .measure-other {
+    display: none;
+    width: 100%;
+    margin-top: 6px;
+    padding: 7px 10px;
+    border: 1.5px solid var(--accent2);
+    border-radius: 5px;
+    font-size: 13px;
+    font-family: inherit;
+    background: #F0F7FF;
+    color: var(--text);
+    resize: vertical;
+    min-height: 34px;
+    outline: none;
+  }
+  .measure-other:focus { border-color: var(--accent); }
+
+  /* 조치 여부 버튼 */
+  .status-btn-group { display: flex; gap: 4px; justify-content: center; flex-wrap: nowrap; }
+  .status-btn {
+    padding: 7px 9px;
+    border: 1.5px solid #bbb;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  .status-btn.sel-done   { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .status-btn.sel-undone { background: #888; color: #fff; border-color: #888; }
+
+  /* ── 하단 영역 ── */
+  .remarks-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .remarks-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: inherit;
+    background: #FFFEF9;
+    color: var(--text);
+    resize: vertical;
+    min-height: 100px;
+    outline: none;
+  }
+  .remarks-input:focus { border-color: var(--accent2); }
+
+  /* ── 액션 버튼 ── */
+  .action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+    justify-content: center;
+  }
+  .action-btn {
+    padding: 13px 24px;
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .action-btn:hover  { opacity: 0.88; }
+  .action-btn:active { transform: scale(0.97); }
+  .btn-summary { background: var(--accent2); color: #fff; }
+  .btn-print   { background: var(--header-bg); color: #fff; }
+  .btn-pdf     { background: var(--accent); color: #fff; }
+
+  /* ── 요약 모달 ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1000;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px 12px;
+    overflow-y: auto;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--card-bg);
+    border: 2px solid var(--high);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 680px;
+    padding: 0;
+    margin: auto;
+  }
+  .modal-header {
+    background: var(--high);
+    color: #fff;
+    padding: 14px 18px;
+    border-radius: 6px 6px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+  }
+  .modal-body { padding: 16px 18px; }
+  .modal-empty { color: var(--muted); font-size: 15px; text-align: center; padding: 20px 0; }
+  .summary-item {
+    border: 1.5px solid var(--high);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    background: var(--high-bg);
+  }
+  .summary-item .s-cat  { font-size: 12px; color: var(--high); font-weight: 700; margin-bottom: 3px; }
+  .summary-item .s-factor { font-size: 15px; font-weight: 700; }
+  .summary-item .s-measure { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .summary-item .s-status { font-size: 13px; margin-top: 5px; font-weight: 700; }
+  .s-done   { color: var(--accent); }
+  .s-undone { color: #888; }
+
+  /* ── 인쇄 스타일 ── */
+  @media print {
+    /* ─── 기본 ─────────────────────────────────────────────── */
+    body { background: #fff; font-size: 13px; }
+    .action-bar, .modal-overlay, .sig-modal-overlay { display: none !important; }
+    .container { padding: 0; max-width: 100%; }
+    .page-header {
+      background: #5C3D2E !important;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+
+    /* ─── 카드 공통 ─────────────────────────────────────────── */
+    .card { border: 1px solid #999; }
+
+    /*
+     * ★ 핵심 변경:
+     *   .card { page-break-inside: avoid } 는 표가 긴 경우
+     *   하위 table/tr 의 break 규칙을 모두 무력화한다.
+     *   위험성 평가 카드처럼 표가 긴 경우 카드 자체는 분리를 허용하고,
+     *   분리 위치 제어는 tbody tr 단위에서 담당한다.
+     */
+
+    /* ─────────────────────────────────────────────────────────
+     * 요구사항 3: 데이터 행(tr)이 페이지 경계에서 잘리지 않도록
+     * ───────────────────────────────────────────────────────── */
+    /* 표 자체: 내부에서 페이지 분리 허용 (행 단위 분리를 위해 필수) */
+    table {
+      page-break-inside: auto;
+      break-inside: auto;
+      border-collapse: collapse;
+    }
+    /* 데이터 행: 행 중간에서 잘리지 않도록 */
+    tbody tr {
+      page-break-inside: avoid;
+      break-inside:      avoid;
+    }
+    /* 섹션 제목은 바로 아래 표와 떨어지지 않도록 */
+    .risk-section-title {
+      break-after:      avoid;
+      page-break-after: avoid;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+     * 요구사항 2: 모든 페이지의 표 상단에 thead 자동 반복
+     * ───────────────────────────────────────────────────────── */
+    thead {
+      display: table-header-group;  /* 표준 — 페이지마다 헤더 반복 */
+      break-inside:      avoid;     /* 헤더 행 자체가 잘리지 않도록 */
+      page-break-inside: avoid;
+    }
+    /* 헤더가 반복될 때 표 맨 위에 시각적 연속성 유지 */
+    thead tr { background: #EDE0C8 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+    /* ─────────────────────────────────────────────────────────
+     * 요구사항 1: 페이지가 넘어간 표 상단에 자동 여유 공간
+     * ───────────────────────────────────────────────────────── */
+    /*
+     * CSS에는 "페이지 나눔 이후에만 마진 추가" 속성이 없다.
+     * 대신 두 가지 기법을 조합한다:
+     *
+     * ① @page 여백 — 모든 페이지의 상·하단에 충분한 여백 확보
+     * ② thead th padding-top — 반복되는 헤더 상단에 숨쉬는 공간 추가
+     *    (페이지 경계 직후 첫 헤더 행이 표시될 때 위 여백 역할)
+     */
+    .risk-table thead th {
+      padding-top:    14pt !important;   /* 반복 헤더 상단 여유 공간 */
+      padding-bottom: 7pt  !important;
+    }
+    /* 카드 간격 — 표가 새 카드/섹션에서 시작할 때 위에 공간 확보 */
+    .card + .card,
+    .card {
+      margin-top: 10pt;
+    }
+
+    /* ─── 나머지 인쇄 스타일 ────────────────────────────────── */
+    .risk-table-wrap { overflow: visible; }
+    table.risk-table { min-width: unset; width: 100%; }
+
+    .risk-table tbody tr.risk-high { background: #FDECEA !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .risk-table tbody tr.risk-mid  { background: #FEF5E4 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .risk-table tbody tr.risk-low  { background: #EAFAF1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+    .risk-btn.sel-high { background: var(--high) !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .risk-btn.sel-mid  { background: var(--mid)  !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .risk-btn.sel-low  { background: var(--low)  !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .status-btn.sel-done   { background: var(--accent) !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .status-btn.sel-undone { background: #888       !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  /* ─── @page: 페이지 여백 (인쇄 전용) ──────────────────────── */
+  @page {
+    margin: 18mm 15mm 18mm 15mm;  /* 상·하 여백 충분히 확보 */
+  }
+
+  /* ── 서명 버튼/표시 ── */
+  /* .worker-btn-sig 스타일은 .worker-btn 블록에서 정의됨 */
+  .worker-sig-dot {
+    width: 8px; height: 8px; background: var(--low);
+    border-radius: 50%; flex-shrink: 0;
+  }
+
+  /* ── 서명 모달 ── */
+  .sig-modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.65); z-index: 2000;
+    justify-content: center; align-items: center;
+    padding: 16px;
+  }
+  .sig-modal-overlay.open { display: flex; }
+  .sig-modal-box {
+    background: #fff; border-radius: 10px;
+    width: 100%; max-width: 460px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+  .sig-modal-header {
+    background: var(--accent); color: #fff;
+    padding: 13px 18px; display: flex;
+    justify-content: space-between; align-items: center;
+    font-size: 16px; font-weight: 700;
+  }
+  .sig-modal-body { padding: 16px; }
+  .sig-canvas-wrap {
+    border: 2px dashed var(--border); border-radius: 6px;
+    background: #fff; line-height: 0; overflow: hidden;
+  }
+  #sigCanvas { display: block; touch-action: none; cursor: crosshair; width: 100%; height: auto; }
+  .sig-hint { font-size: 12px; color: var(--muted); text-align: center; margin: 8px 0 4px; }
+  .sig-modal-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .sig-act-btn {
+    flex: 1; padding: 10px; border: none; border-radius: 6px;
+    font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
+    transition: opacity 0.15s;
+  }
+  .sig-act-btn:hover { opacity: 0.85; }
+  .sig-btn-clear  { background: #e8e8e8; color: #444; }
+  .sig-btn-save   { background: var(--accent); color: #fff; }
+  .sig-btn-cancel { background: #f0f0f0; color: #666; }
+
+  /* ── 반응형 ── */
+  @media (max-width: 600px) {
+    .info-grid { grid-template-columns: 1fr; }
+    .page-header .title-kr { font-size: 18px; }
+    .action-btn { font-size: 14px; padding: 11px 18px; }
+    .risk-table th, .risk-table td { font-size: 13px; padding: 8px 6px; }
+    .risk-btn { font-size: 13px; padding: 6px 8px; }
+    .status-btn { font-size: 12px; padding: 6px 7px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── 페이지 헤더 ── -->
+<div class="page-header">
+  <div class="title-kr">문화재돌봄 작업 위험성 평가표</div>
+  <div class="title-sub">Cultural Heritage Care Work Risk Assessment</div>
+  <div class="header-deco">◆ 현장 안전 확인 및 위험 요인 사전 평가 ◆</div>
+</div>
+
+<div class="container">
+
+  <!-- ── 기본 정보 ── -->
+  <div class="card">
+    <div class="card-header"><span class="icon">📋</span> 기본 정보</div>
+    <div class="card-body">
+      <div class="info-grid">
+        <div>
+          <label class="field-label" for="heritageName">문화재명</label>
+          <input type="text" id="heritageName" class="field-input" placeholder="문화재 명칭을 입력하세요">
+        </div>
+        <div>
+          <label class="field-label" for="workDate">작업일자</label>
+          <input type="date" id="workDate" class="field-input">
+        </div>
+        <div class="full">
+          <label class="field-label">팀 명</label>
+          <div class="worker-selector" id="teamSelector">
+            <div class="worker-display" id="teamDisplay" onclick="toggleTeamDropdown(event)">
+              <span class="worker-display-text ph" id="teamDisplayText">-- 선택 또는 추가 --</span>
+              <span class="worker-arrow">▾</span>
+            </div>
+            <div class="worker-dropdown" id="teamDropdown" style="display:none">
+              <div id="teamListItems"></div>
+              <div class="worker-add-row">
+                <input type="text" id="teamAddInput" class="worker-add-input" placeholder="팀 명 입력 후 추가"
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();addTeam();}">
+                <button type="button" class="worker-add-btn" onclick="addTeam()">추가</button>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="teamName">
+        </div>
+        <div class="full">
+          <label class="field-label">작업자명</label>
+          <div class="worker-selector" id="workerSelector">
+            <div class="worker-display" id="workerDisplay" onclick="toggleWorkerDropdown(event)">
+              <span class="worker-display-text ph" id="workerDisplayText">-- 선택 또는 추가 --</span>
+              <span class="worker-arrow">▾</span>
+            </div>
+            <div class="worker-dropdown" id="workerDropdown" style="display:none">
+              <div id="workerListItems"></div>
+              <div class="worker-add-row">
+                <input type="text" id="workerAddInput" class="worker-add-input" placeholder="이름 입력 후 추가"
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();addWorker();}">
+                <button class="worker-add-btn" onclick="addWorker()">추가</button>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="workerName">
+        </div>
+        <div>
+          <label class="field-label">작업 유형</label>
+          <div class="work-type-group">
+            <label class="work-type-label">
+              <input type="checkbox" id="wt_daily" class="work-type-cb" value="daily" onchange="updateWorkCategory()">
+              일상관리
+            </label>
+            <label class="work-type-label">
+              <input type="checkbox" id="wt_minor" class="work-type-cb" value="minor" onchange="updateWorkCategory()">
+              경미수리
+            </label>
+          </div>
+        </div>
+        <div class="full">
+          <label class="field-label">작업 종류</label>
+          <div class="worker-selector" id="catSelector">
+            <div class="worker-display" id="catDisplay" onclick="toggleCatDropdown(event)">
+              <span class="worker-display-text ph" id="catDisplayText">-- 작업 유형을 먼저 선택하세요 --</span>
+              <span class="worker-arrow">▾</span>
+            </div>
+            <div class="worker-dropdown" id="catDropdown" style="display:none;max-height:240px;overflow-y:auto;">
+              <div id="catListItems"></div>
+            </div>
+          </div>
+          <input type="hidden" id="workCategory">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 위험성 평가표 ── -->
+  <div style="margin-bottom:8px;font-size:13px;color:var(--muted);padding-left:2px;">
+    ※ 각 위험 요인별 위험도(상/중/하)를 선택하고, 감소 대책과 조치 여부를 입력하세요.
+  </div>
+
+  <!-- 1. 추락·낙하 위험 -->
+  <div class="card" id="sec1">
+    <div class="risk-section-title">
+      <span class="num">1</span> 추락·낙하 위험
+    </div>
+    <div class="risk-table-wrap">
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th style="width:22%">위험 요인</th>
+            <th style="width:22%">위험도</th>
+            <th style="width:40%">감소 대책</th>
+            <th style="width:16%">조치 여부</th>
+          </tr>
+        </thead>
+        <tbody id="tbody1"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2. 근골격계·신체 위험 -->
+  <div class="card" id="sec2">
+    <div class="risk-section-title">
+      <span class="num">2</span> 근골격계·신체 위험
+    </div>
+    <div class="risk-table-wrap">
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th style="width:22%">위험 요인</th>
+            <th style="width:22%">위험도</th>
+            <th style="width:40%">감소 대책</th>
+            <th style="width:16%">조치 여부</th>
+          </tr>
+        </thead>
+        <tbody id="tbody2"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3. 기계·장비 위험 -->
+  <div class="card" id="sec3">
+    <div class="risk-section-title">
+      <span class="num">3</span> 기계·장비 위험
+    </div>
+    <div class="risk-table-wrap">
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th style="width:22%">위험 요인</th>
+            <th style="width:22%">위험도</th>
+            <th style="width:40%">감소 대책</th>
+            <th style="width:16%">조치 여부</th>
+          </tr>
+        </thead>
+        <tbody id="tbody3"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. 환경·기상 위험 -->
+  <div class="card" id="sec4">
+    <div class="risk-section-title">
+      <span class="num">4</span> 환경·기상 위험
+    </div>
+    <div class="risk-table-wrap">
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th style="width:22%">위험 요인</th>
+            <th style="width:22%">위험도</th>
+            <th style="width:40%">감소 대책</th>
+            <th style="width:16%">조치 여부</th>
+          </tr>
+        </thead>
+        <tbody id="tbody4"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 5. 문화유산 훼손 위험 -->
+  <div class="card" id="sec5">
+    <div class="risk-section-title">
+      <span class="num">5</span> 문화유산 훼손 위험
+    </div>
+    <div class="risk-table-wrap">
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th style="width:22%">위험 요인</th>
+            <th style="width:22%">위험도</th>
+            <th style="width:40%">감소 대책</th>
+            <th style="width:16%">조치 여부</th>
+          </tr>
+        </thead>
+        <tbody id="tbody5"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── 특이사항·종합 의견 ── -->
+  <div class="card">
+    <div class="card-header"><span class="icon">📝</span> 특이사항·종합 의견</div>
+    <div class="card-body">
+      <label class="remarks-label" for="remarks">현장 특이사항 또는 종합 의견을 입력하세요</label>
+      <textarea id="remarks" class="remarks-input" placeholder="예) 당일 기상 악화 예보로 추락 위험 항목 집중 관리, 비계 추가 보강 조치 완료..."></textarea>
+    </div>
+  </div>
+
+  <!-- ── 액션 버튼 ── -->
+  <div class="action-bar">
+    <button class="action-btn btn-summary" onclick="showSummary()">🔴 위험도 요약 보기</button>
+    <button class="action-btn btn-print"   onclick="doPrint()">🖨️ 인쇄하기</button>
+    <button class="action-btn btn-pdf"     onclick="doPDF()">💾 내용 저장 (PDF)</button>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ── 요약 모달 ── -->
+<div class="modal-overlay" id="summaryModal" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      🔴 위험도 "상" 항목 요약
+      <button class="modal-close" onclick="closeSummary()">✕</button>
+    </div>
+    <div class="modal-body" id="summaryContent"></div>
+  </div>
+</div>
+
+<!-- ── 서명 모달 ── -->
+<div class="sig-modal-overlay" id="sigModal">
+  <div class="sig-modal-box">
+    <div class="sig-modal-header">
+      ✍ <span id="sigModalTitle">서명</span>
+      <button class="modal-close" onclick="closeSigModal()" style="color:#fff;font-size:22px;background:none;border:none;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
+    </div>
+    <div class="sig-modal-body">
+      <div class="sig-canvas-wrap">
+        <canvas id="sigCanvas" width="420" height="180"></canvas>
+      </div>
+      <div class="sig-hint">손가락 또는 마우스로 서명하세요</div>
+      <div class="sig-modal-actions">
+        <button class="sig-act-btn sig-btn-clear"  onclick="clearSigCanvas()">지우기</button>
+        <button class="sig-act-btn sig-btn-save"   onclick="saveSig()">저장</button>
+        <button class="sig-act-btn sig-btn-cancel" onclick="closeSigModal()">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+/* ──── 데이터 정의 ──── */
+const workCategories = {
+  daily: ['환경정비','경관(조경)정비','지붕 위 이물질 제거','풀깎기(예초)','풀뽑기(김매기)','제빙·제설 작업','철물방청작업'],
+  minor: ['도배','목부재 기름칠','창호보수','마루보수','판문보수','목공작업','석조물 세척','벽체보수','기와보수','기와고르기','안내판 정비','굴뚝 등 보수','담장 보수','계단·기단·석축 정비','배수로 보수','이엉 보수','충전 작업','지반 정비','주변 시설물 정비','주변 시설물 정비(보호 울타리 등)','마루·대문 부문 보수','기타']
+};
+
+const riskData = [
+  {
+    id: 1,
+    items: [
+      '사다리·발판 불안정',
+      '지붕·고소 작업 시 추락',
+      '공구·자재 낙하',
+      '비계 설치 불량'
+    ]
+  },
+  {
+    id: 2,
+    items: [
+      '무거운 자재 운반 (요통)',
+      '장시간 쪼그린 자세',
+      '반복 동작으로 인한 근육 피로',
+      '날카로운 도구 취급 (베임·찔림)'
+    ]
+  },
+  {
+    id: 3,
+    items: [
+      '예초기·전동공구(전동드릴, 그라인더 등) 사용',
+      '블로워 사용 (바람에 의한 물건 낙하 등)',
+      '진동·소음',
+      '장비 오작동'
+    ]
+  },
+  {
+    id: 4,
+    items: [
+      '폭염·한파 등 기상 악화',
+      '미끄러운 바닥 (우천·결빙)',
+      '벌·뱀 등 해충',
+      '유해 먼지·분진 흡입'
+    ]
+  },
+  {
+    id: 5,
+    items: [
+      '작업 중 문화유산 직접 충격',
+      '자재·장비 접촉으로 인한 손상',
+      '화학 약품(농약) 사용 부적절',
+      '우수 침투·수분 피해'
+    ]
+  }
+];
+
+const sectionNames = ['추락·낙하 위험','근골격계·신체 위험','기계·장비 위험','환경·기상 위험','문화유산 훼손 위험'];
+
+/* ──── 감소 대책 예시 옵션 (섹션 × 항목) ──── */
+const measureOptions = [
+  [ // 1. 추락·낙하 위험
+    ['안전 발판 고정 및 수평 확인','안전모·안전벨트 착용','2인 1조 작업 실시','미끄럼 방지 패드 부착','작업 전 사다리 상태 점검'],
+    ['안전대·구명줄 착용 의무화','추락 방지망 설치','작업 구역 접근 통제','안전모 착용 의무화','2인 1조 작업 실시'],
+    ['공구 낙하 방지 끈 결속','하부 접근 금지 구역 설정','안전망·방호 시트 설치','자재 고정 후 작업 진행','낙하물 방지 덮개 설치'],
+    ['설치 전 자격자 점검 실시','고정 볼트 재확인','작업 전 구조 안전 점검','과적 금지 및 하중 제한 준수','전문 업체 설치 의뢰'],
+  ],
+  [ // 2. 근골격계·신체 위험
+    ['허리 보호대 착용','2인 이상 공동 운반','운반 장비(대차) 활용','적정 중량(25kg 이하) 준수','작업 전 스트레칭 실시'],
+    ['무릎 보호대 착용','정기적 휴식 및 스트레칭','보조 받침대(무릎패드) 사용','작업 높이 조절','작업 시간 분산'],
+    ['적정 휴식 시간 확보','작업 전후 스트레칭 실시','작업자 교대 배치','작업량 조절 및 분산','근육 피로도 자가 점검'],
+    ['방검 장갑 착용','보호대 착용','안전 사용법 사전 교육','사용 후 안전 케이스 보관','응급처치 키트 현장 비치'],
+  ],
+  [ // 3. 기계·장비 위험
+    ['보호 안경·안면 보호대 착용','방진 장갑 착용','작업 전 이상 유무 점검','사용 전 안전 교육 이수','안전 작동 수칙 준수'],
+    ['주변 인원 대피 후 사용','낙하 위험물 사전 제거','하향·측면 방향 사용','보호 안경 착용','작업 구역 접근 통제'],
+    ['방진 장갑 착용','귀마개·방음 귀덮개 착용','연속 작업 시간 제한','진동 저감 장비 사용','정기적 휴식'],
+    ['작업 전 장비 상태 점검','이상 발생 시 즉시 작동 중지','정기 유지보수 실시','비상 정지 버튼 위치 숙지','장비 사용 교육 이수'],
+  ],
+  [ // 4. 환경·기상 위험
+    ['기상 예보 확인 후 작업 결정','수분 보충 및 그늘 휴식','방한·방열 복장 착용','폭염·한파 특보 시 작업 중단','1시간마다 휴식 실시'],
+    ['미끄럼 방지 신발 착용','작업 전 바닥 상태 확인','미끄럼 방지 매트 설치','안전한 보행로 확보','우천·결빙 시 작업 중단 검토'],
+    ['작업 전 주변 수풀 확인','긴 소매·긴 바지 착용','응급처치 키트 현장 비치','해충 기피제 사용','벌집·뱀 발견 시 전문가 신고'],
+    ['방진 마스크(KF80 이상) 착용','작업 전후 충분한 환기','살수로 분진 억제','보호 안경 착용','작업 시간 최소화'],
+  ],
+  [ // 5. 문화유산 훼손 위험
+    ['작업 경로 사전 확인 및 지정','보호 완충재(에어캡 등) 설치','주의 표지 및 접근 통제','작업 범위 명확히 구분','담당자 현장 동행 감독'],
+    ['자재 이동 시 보호 포장','문화유산 주변 완충재 설치','장비 진입 경로 별도 확보','접촉 금지 구역 표시','작업 전 보호 조치 확인'],
+    ['승인된 약품만 사용','사용 전 담당자 승인 확인','보호복·장갑 착용','문화유산 접촉 차단 조치','사용 후 잔여물 완전 처리'],
+    ['방수 시트 덮기','배수로 확인 및 정비','우천 예보 시 작업 중단','건조 후 작업 재개','피해 발생 시 즉시 담당자 보고'],
+  ]
+];
+
+/* ──── 감소 대책 드롭다운 핸들러 ──── */
+function handleMeasureSelect(sel) {
+  const other = sel.nextElementSibling;
+  if (sel.value === '__other__') {
+    other.style.display = 'block';
+    other.focus();
+  } else {
+    other.style.display = 'none';
+  }
+}
+
+/* ──── 감소 대책 값 읽기 ──── */
+function getMeasureValue(tr) {
+  const sel = tr.querySelector('.measure-select');
+  if (!sel) return '';
+  if (sel.value === '__other__') {
+    return tr.querySelector('.measure-other').value.trim();
+  }
+  return sel.value;
+}
+
+/* ──── 초기 렌더링 ──── */
+function buildTables() {
+  riskData.forEach((sec, si) => {
+    const tbody = document.getElementById('tbody' + sec.id);
+    sec.items.forEach((factor, idx) => {
+      const rid = `r${sec.id}_${idx}`;
+      const opts = measureOptions[si][idx];
+      const optionsHTML = opts.map(o => `<option value="${o}">${o}</option>`).join('');
+      const tr = document.createElement('tr');
+      tr.id = rid;
+      tr.innerHTML = `
+        <td class="factor-text">${factor}</td>
+        <td>
+          <div class="risk-btn-group">
+            <button class="risk-btn" onclick="setRisk('${rid}','high',this)">상</button>
+            <button class="risk-btn" onclick="setRisk('${rid}','mid',this)">중</button>
+            <button class="risk-btn" onclick="setRisk('${rid}','low',this)">하</button>
+          </div>
+        </td>
+        <td>
+          <select class="measure-select" onchange="handleMeasureSelect(this)">
+            <option value="">-- 대책 선택 --</option>
+            ${optionsHTML}
+            <option value="__other__">기타 (직접 입력)</option>
+          </select>
+          <textarea class="measure-other" placeholder="직접 입력하세요" rows="2"></textarea>
+        </td>
+        <td>
+          <div class="status-btn-group">
+            <button class="status-btn" onclick="setStatus('${rid}',true,this)">완료</button>
+            <button class="status-btn" onclick="setStatus('${rid}',false,this)">미완료</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  });
+}
+
+/* ──── 작업 종류 드롭다운 갱신 ──── */
+let selectedCategories = new Set();
+
+function _availableCats() {
+  const daily = document.getElementById('wt_daily').checked;
+  const minor = document.getElementById('wt_minor').checked;
+  const cats = [];
+  if (daily) cats.push(...workCategories.daily);
+  if (minor) cats.push(...workCategories.minor);
+  const seen = new Set();
+  return cats.filter(c => seen.has(c) ? false : (seen.add(c), true));
+}
+
+function updateWorkCategory() {
+  const avail = _availableCats();
+  // 더 이상 없는 항목은 선택 해제
+  for (const c of [...selectedCategories]) {
+    if (!avail.includes(c)) selectedCategories.delete(c);
+  }
+  renderCatList();
+  updateCatDisplay();
+  // 드롭다운이 열려 있으면 유지
+}
+
+function renderCatList() {
+  const avail = _availableCats();
+  const container = document.getElementById('catListItems');
+  if (!avail.length) {
+    container.innerHTML = '<div class="worker-empty">작업 유형을 먼저 선택하세요</div>';
+    return;
+  }
+  container.innerHTML = avail.map(name => {
+    const safe = name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    const checked = selectedCategories.has(name) ? 'checked' : '';
+    return `<div class="worker-item">
+      <input type="checkbox" class="worker-cb" ${checked}
+        onchange="toggleCatSelect('${safe}',this.checked)">
+      <span class="worker-name" onclick="toggleCatSelectByName('${safe}')">${name}</span>
+    </div>`;
+  }).join('');
+}
+
+function toggleCatDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('catDropdown');
+  const disp = document.getElementById('catDisplay');
+  const isOpen = dd.style.display !== 'none';
+  dd.style.display = isOpen ? 'none' : 'block';
+  disp.classList.toggle('open', !isOpen);
+  if (!isOpen) renderCatList();
+}
+
+function toggleCatSelect(name, checked) {
+  if (checked) selectedCategories.add(name);
+  else selectedCategories.delete(name);
+  updateCatDisplay();
+}
+
+function toggleCatSelectByName(name) {
+  if (selectedCategories.has(name)) selectedCategories.delete(name);
+  else selectedCategories.add(name);
+  renderCatList();
+  updateCatDisplay();
+}
+
+function updateCatDisplay() {
+  const avail = _availableCats();
+  const txt = document.getElementById('catDisplayText');
+  const hidden = document.getElementById('workCategory');
+  const selected = avail.filter(n => selectedCategories.has(n));
+  if (!avail.length) {
+    txt.textContent = '-- 작업 유형을 먼저 선택하세요 --';
+    txt.classList.add('ph'); hidden.value = '';
+  } else if (selected.length === 0) {
+    txt.textContent = '-- 작업 종류 선택 --';
+    txt.classList.add('ph'); hidden.value = '';
+  } else {
+    txt.textContent = selected.join(', ');
+    txt.classList.remove('ph');
+    hidden.value = selected.join(', ');
+  }
+}
+
+/* ──── 위험도 선택 ──── */
+function setRisk(rowId, level, btn) {
+  const tr = document.getElementById(rowId);
+  const btns = btn.closest('.risk-btn-group').querySelectorAll('.risk-btn');
+  btns.forEach(b => b.className = 'risk-btn');
+  btn.classList.add('sel-' + level);
+  tr.dataset.risk = level;
+  tr.classList.remove('risk-high','risk-mid','risk-low');
+  tr.classList.add('risk-' + level);
+}
+
+/* ──── 조치 여부 선택 ──── */
+function setStatus(rowId, done, btn) {
+  const btns = btn.closest('.status-btn-group').querySelectorAll('.status-btn');
+  btns.forEach(b => b.className = 'status-btn');
+  btn.classList.add(done ? 'sel-done' : 'sel-undone');
+  const tr = document.getElementById(rowId);
+  tr.dataset.status = done ? 'done' : 'undone';
+}
+
+/* ──── 요약 보기 ──── */
+function showSummary() {
+  const content = document.getElementById('summaryContent');
+  const highRows = [];
+  riskData.forEach((sec, si) => {
+    sec.items.forEach((factor, idx) => {
+      const rid = `r${sec.id}_${idx}`;
+      const tr = document.getElementById(rid);
+      if (tr && tr.dataset.risk === 'high') {
+        const measure = getMeasureValue(tr);
+        const status = tr.dataset.status;
+        highRows.push({ cat: sectionNames[si], factor, measure, status });
+      }
+    });
+  });
+
+  if (highRows.length === 0) {
+    content.innerHTML = '<div class="modal-empty">위험도 "상"으로 선택된 항목이 없습니다.</div>';
+  } else {
+    content.innerHTML = highRows.map(r => `
+      <div class="summary-item">
+        <div class="s-cat">【 ${r.cat} 】</div>
+        <div class="s-factor">⚠ ${r.factor}</div>
+        ${r.measure ? `<div class="s-measure">📌 감소 대책: ${r.measure}</div>` : '<div class="s-measure" style="color:#bbb;">감소 대책 미입력</div>'}
+        <div class="s-status ${r.status === 'done' ? 's-done' : (r.status === 'undone' ? 's-undone' : '')}">
+          ${r.status === 'done' ? '✔ 조치 완료' : r.status === 'undone' ? '✘ 미완료' : '⬜ 조치 여부 미선택'}
+        </div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('summaryModal').classList.add('open');
+}
+
+function closeSummary() {
+  document.getElementById('summaryModal').classList.remove('open');
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('summaryModal')) closeSummary();
+}
+
+/* ──── 인쇄 ──── */
+function doPrint() {
+  window.print();
+}
+
+/* ──── HWPX 내용 저장 ──── */
+function xe(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+let _pid=1000000001;
+function npid(){return String(_pid++);}
+
+/* base64 dataURL → Uint8Array (PNG 바이너리) */
+function b64ToUint8(dataUrl){
+  try{
+    const b64=dataUrl.replace(/^data:[^;]+;base64,/,'');
+    const bin=atob(b64);
+    const u=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i);
+    return u;
+  }catch(e){ return new Uint8Array(0); }
+}
+
+function charPrXml(id,height,fontRef,bold,bfRef,shadowColor){
+  const f=fontRef||0;
+  const hf=Math.min(f,1); // HANJA fontface has max 2 fonts (0,1)
+  const sc=shadowColor||'#B2B2B2';
+  return `<hh:charPr id="${id}" height="${height}" textColor="#000000" shadeColor="none" useFontSpace="0" useKerning="0" symMark="NONE" borderFillIDRef="${bfRef||1}"><hh:fontRef hangul="${f}" latin="${f}" hanja="${hf}" japanese="${f}" other="${f}" symbol="${f}" user="${f}"/><hh:ratio hangul="100" latin="100" hanja="100" japanese="100" other="100" symbol="100" user="100"/><hh:spacing hangul="0" latin="0" hanja="0" japanese="0" other="0" symbol="0" user="0"/><hh:relSz hangul="100" latin="100" hanja="100" japanese="100" other="100" symbol="100" user="100"/><hh:offset hangul="0" latin="0" hanja="0" japanese="0" other="0" symbol="0" user="0"/>${bold?'<hh:bold/>':''}<hh:underline type="NONE" shape="SOLID" color="#000000"/><hh:strikeout shape="NONE" color="#000000"/><hh:outline type="NONE"/><hh:shadow type="NONE" color="${sc}" offsetX="10" offsetY="10"/></hh:charPr>`;
+}
+function paraPrXml(id,align,ls){
+  const m=`<hh:margin><hc:intent value="0" unit="HWPUNIT"/><hc:left value="0" unit="HWPUNIT"/><hc:right value="0" unit="HWPUNIT"/><hc:prev value="0" unit="HWPUNIT"/><hc:next value="0" unit="HWPUNIT"/></hh:margin>`;
+  const sp=`<hh:lineSpacing type="PERCENT" value="${ls}" unit="HWPUNIT"/>`;
+  return `<hh:paraPr id="${id}" tabPrIDRef="0" condense="0" fontLineHeight="0" snapToGrid="1" suppressLineNumbers="0" checked="0" textDir="LTR"><hh:align horizontal="${align}" vertical="BASELINE"/><hh:heading type="NONE" idRef="0" level="0"/><hh:breakSetting breakLatinWord="KEEP_WORD" breakNonLatinWord="BREAK_WORD" widowOrphan="0" keepWithNext="0" keepLines="0" pageBreakBefore="0" lineWrap="BREAK"/><hh:autoSpacing eAsianEng="0" eAsianNum="0"/><hp:switch><hp:case hp:required-namespace="http://www.hancom.co.kr/hwpml/2016/HwpUnitChar">${m}${sp}</hp:case><hp:default>${m}${sp}</hp:default></hp:switch><hh:border borderFillIDRef="2" offsetLeft="0" offsetRight="0" offsetTop="0" offsetBottom="0" connect="0" ignoreMargin="0"/></hh:paraPr>`;
+}
+
+function getHeaderXml(binDataCnt){
+  binDataCnt=binDataCnt||0;
+  const _bf=(n)=>`BIN${String(n).padStart(4,'0')}`;
+  const binDataXml=binDataCnt>0
+    ?`<hh:binDataList itemCnt="${binDataCnt}">${
+        Array.from({length:binDataCnt},(_,i)=>
+          `<hh:binData id="${_bf(i+1)}" format="png" compress="0" access="EMBEDDING" href="BinData/sig${i}.png"/>`
+        ).join('')
+      }</hh:binDataList>`
+    :'';
+  const NS=`xmlns:ha="http://www.hancom.co.kr/hwpml/2011/app" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph" xmlns:hp10="http://www.hancom.co.kr/hwpml/2016/paragraph" xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hc="http://www.hancom.co.kr/hwpml/2011/core" xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head" xmlns:hhs="http://www.hancom.co.kr/hwpml/2011/history" xmlns:hm="http://www.hancom.co.kr/hwpml/2011/master-page" xmlns:hpf="http://www.hancom.co.kr/schema/2011/hpf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf/" xmlns:ooxmlchart="http://www.hancom.co.kr/hwpml/2016/ooxmlchart" xmlns:hwpunitchar="http://www.hancom.co.kr/hwpml/2016/HwpUnitChar" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0"`;
+  const hkc=(id)=>`<hh:font id="${id}" face="한컴바탕" type="TTF" isEmbedded="0"><hh:typeInfo familyType="FCAT_GOTHIC" weight="6" proportion="0" contrast="0" strokeVariation="1" armStyle="1" letterform="1" midline="1" xHeight="1"/></hh:font>`;
+  const hmb=(id)=>`<hh:font id="${id}" face="함초롬바탕" type="TTF" isEmbedded="0"><hh:typeInfo familyType="FCAT_GOTHIC" weight="6" proportion="4" contrast="0" strokeVariation="1" armStyle="1" letterform="1" midline="1" xHeight="1"/></hh:font>`;
+  const fb=(lang)=>`<hh:fontface lang="${lang}" fontCnt="3">${hkc(0)}${hkc(1)}${hmb(2)}</hh:fontface>`;
+  const fbHanja=`<hh:fontface lang="HANJA" fontCnt="2">${hmb(0)}${hmb(1)}</hh:fontface>`;
+  return `<?xml version='1.0' encoding='UTF-8'?>
+<hh:head ${NS} version="1.5" secCnt="1">
+<hh:beginNum page="1" footnote="1" endnote="1" pic="1" tbl="1" equation="1"/>
+<hh:refList>
+<hh:fontfaces itemCnt="7">${fb('HANGUL')}${fb('LATIN')}${fbHanja}${fb('JAPANESE')}${fb('OTHER')}${fb('SYMBOL')}${fb('USER')}</hh:fontfaces>
+<hh:borderFills itemCnt="6">
+<hh:borderFill id="1" threeD="0" shadow="0" centerLine="NONE" breakCellSeparateLine="0"><hh:slash type="NONE" Crooked="0" isCounter="0"/><hh:backSlash type="NONE" Crooked="0" isCounter="0"/><hh:leftBorder type="NONE" width="0.1 mm" color="#000000"/><hh:rightBorder type="NONE" width="0.1 mm" color="#000000"/><hh:topBorder type="NONE" width="0.1 mm" color="#000000"/><hh:bottomBorder type="NONE" width="0.1 mm" color="#000000"/><hh:diagonal type="SOLID" width="0.1 mm" color="#000000"/></hh:borderFill>
+<hh:borderFill id="2" threeD="0" shadow="0" centerLine="NONE" breakCellSeparateLine="0"><hh:slash type="NONE" Crooked="0" isCounter="0"/><hh:backSlash type="NONE" Crooked="0" isCounter="0"/><hh:leftBorder type="NONE" width="0.1 mm" color="#000000"/><hh:rightBorder type="NONE" width="0.1 mm" color="#000000"/><hh:topBorder type="NONE" width="0.1 mm" color="#000000"/><hh:bottomBorder type="NONE" width="0.1 mm" color="#000000"/><hh:diagonal type="SOLID" width="0.1 mm" color="#000000"/><hc:fillBrush><hc:winBrush faceColor="none" hatchColor="#999999" alpha="0"/></hc:fillBrush></hh:borderFill>
+<hh:borderFill id="3" threeD="0" shadow="0" centerLine="NONE" breakCellSeparateLine="0"><hh:slash type="NONE" Crooked="0" isCounter="0"/><hh:backSlash type="NONE" Crooked="0" isCounter="0"/><hh:leftBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:rightBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:topBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:bottomBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:diagonal type="SOLID" width="0.12 mm" color="#000000"/></hh:borderFill>
+<hh:borderFill id="4" threeD="0" shadow="0" centerLine="NONE" breakCellSeparateLine="0"><hh:slash type="NONE" Crooked="0" isCounter="0"/><hh:backSlash type="NONE" Crooked="0" isCounter="0"/><hh:leftBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:rightBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:topBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:bottomBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:diagonal type="SOLID" width="0.12 mm" color="#000000"/><hc:fillBrush><hc:winBrush faceColor="#DAEEF3" hatchColor="#999999" alpha="0"/></hc:fillBrush></hh:borderFill>
+<hh:borderFill id="5" threeD="0" shadow="0" centerLine="NONE" breakCellSeparateLine="0"><hh:slash type="NONE" Crooked="0" isCounter="0"/><hh:backSlash type="NONE" Crooked="0" isCounter="0"/><hh:leftBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:rightBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:topBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:bottomBorder type="SOLID" width="0.12 mm" color="#000000"/><hh:diagonal type="SOLID" width="0.1 mm" color="#000000"/></hh:borderFill>
+<hh:borderFill id="6" threeD="0" shadow="0" centerLine="NONE" breakCellSeparateLine="0"><hh:slash type="NONE" Crooked="0" isCounter="0"/><hh:backSlash type="NONE" Crooked="0" isCounter="0"/><hh:leftBorder type="NONE" width="0.1 mm" color="#000000"/><hh:rightBorder type="NONE" width="0.1 mm" color="#000000"/><hh:topBorder type="NONE" width="0.1 mm" color="#000000"/><hh:bottomBorder type="NONE" width="0.1 mm" color="#000000"/><hh:diagonal type="SOLID" width="0.1 mm" color="#000000"/><hc:fillBrush><hc:winBrush faceColor="none" hatchColor="#000000" alpha="0"/></hc:fillBrush></hh:borderFill>
+</hh:borderFills>
+<hh:charProperties itemCnt="4">${charPrXml(0,1000,0,false,1,'#B2B2B2')}${charPrXml(1,1000,2,false,2,'#C0C0C0')}${charPrXml(2,1500,1,true,6,'#B2B2B2')}${charPrXml(3,1000,1,true,6,'#B2B2B2')}</hh:charProperties>
+<hh:tabProperties itemCnt="1"><hh:tabPr id="0" autoTabLeft="0" autoTabRight="0"/></hh:tabProperties>
+<hh:numberings itemCnt="1"><hh:numbering id="1" start="0"><hh:paraHead start="1" level="1" align="LEFT" useInstWidth="1" autoIndent="1" widthAdjust="0" textOffsetType="PERCENT" textOffset="50" numFormat="DIGIT" charPrIDRef="4294967295" checkable="0">^1.</hh:paraHead></hh:numbering></hh:numberings>
+<hh:paraProperties itemCnt="2">${paraPrXml(0,'CENTER',160)}${paraPrXml(1,'CENTER',130)}</hh:paraProperties>
+<hh:styles itemCnt="1"><hh:style id="0" type="PARA" name="바탕글" engName="Normal" paraPrIDRef="0" charPrIDRef="1" nextStyleIDRef="0" langID="1042" lockForm="0"/></hh:styles>
+${binDataXml}</hh:refList>
+<hh:compatibleDocument targetProgram="HWP201X"><hh:layoutCompatibility/></hh:compatibleDocument>
+<hh:docOption><hh:linkinfo path="" pageInherit="0" footnoteInherit="0"/></hh:docOption>
+<hh:metaTag>{"name":""}</hh:metaTag>
+<hh:trackchageConfig flags="56"/>
+</hh:head>`;
+}
+
+function genSection0(d){
+  _pid=1000000001;
+  const NS=`xmlns:ha="http://www.hancom.co.kr/hwpml/2011/app" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph" xmlns:hp10="http://www.hancom.co.kr/hwpml/2016/paragraph" xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hc="http://www.hancom.co.kr/hwpml/2011/core" xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head" xmlns:hhs="http://www.hancom.co.kr/hwpml/2011/history" xmlns:hm="http://www.hancom.co.kr/hwpml/2011/master-page" xmlns:hpf="http://www.hancom.co.kr/schema/2011/hpf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf/" xmlns:ooxmlchart="http://www.hancom.co.kr/hwpml/2016/ooxmlchart" xmlns:hwpunitchar="http://www.hancom.co.kr/hwpml/2016/HwpUnitChar" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0"`;
+
+  function blankP(){return `<hp:p id="${npid()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:t/></hp:run></hp:p>`;}
+  function textP(text,cp,pp){return `<hp:p id="${npid()}" paraPrIDRef="${pp||0}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="${cp||0}"><hp:t>${xe(text)}</hp:t></hp:run></hp:p>`;}
+  function cell(text,col,row,cs,rs,cw,rh,cp,pp,bf){
+    return `<hp:tc name="" header="0" hasMargin="0" protect="0" editable="0" dirty="1" borderFillIDRef="${bf||3}"><hp:subList id="" textDirection="HORIZONTAL" lineWrap="BREAK" vertAlign="CENTER" linkListIDRef="0" linkListNextIDRef="0" textWidth="0" textHeight="0" hasTextRef="0" hasNumRef="0"><hp:p paraPrIDRef="${pp||1}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0" id="${npid()}"><hp:run charPrIDRef="${cp||0}"><hp:t>${xe(text)}</hp:t></hp:run></hp:p></hp:subList><hp:cellAddr colAddr="${col}" rowAddr="${row}"/><hp:cellSpan colSpan="${cs||1}" rowSpan="${rs||1}"/><hp:cellSz width="${cw}" height="${rh}"/><hp:cellMargin left="510" right="510" top="141" bottom="141"/></hp:tc>`;
+  }
+  function tbl(trs,colW,rowH){
+    const tw=colW.reduce((a,b)=>a+b,0), th=rowH.reduce((a,b)=>a+b,0);
+    return `<hp:p id="${npid()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:tbl id="${npid()}" zOrder="0" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="0" rowCnt="${rowH.length}" colCnt="${colW.length}" cellSpacing="0" borderFillIDRef="3" noAdjust="0"><hp:sz width="${tw}" widthRelTo="ABSOLUTE" height="${th}" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:inMargin left="0" right="0" top="0" bottom="0"/>${trs}</hp:tbl></hp:run></hp:p>`;
+  }
+  const secPr=`<hp:p id="${npid()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:secPr id="" textDirection="HORIZONTAL" spaceColumns="1134" tabStop="8000" tabStopVal="4000" tabStopUnit="HWPUNIT" outlineShapeIDRef="1" memoShapeIDRef="0" textVerticalWidthHead="0" masterPageCnt="0"><hp:grid lineGrid="0" charGrid="0" wonggojiFormat="0"/><hp:startNum pageStartsOn="BOTH" page="0" pic="0" tbl="0" equation="0"/><hp:visibility hideFirstHeader="0" hideFirstFooter="0" hideFirstMasterPage="0" border="SHOW_ALL" fill="SHOW_ALL" hideFirstPageNum="0" hideFirstEmptyLine="0" showLineNumber="0"/><hp:lineNumberShape restartType="0" countBy="0" distance="0" startNumber="0"/><hp:pagePr landscape="WIDELY" width="59528" height="84186" gutterType="LEFT_ONLY"><hp:margin header="4252" footer="4252" gutter="0" left="8504" right="8504" top="5668" bottom="4252"/></hp:pagePr><hp:footNotePr><hp:autoNumFormat type="DIGIT" userChar="" prefixChar="" suffixChar=")" supscript="0"/><hp:noteLine length="-1" type="SOLID" width="0.12 mm" color="#000000"/><hp:noteSpacing betweenNotes="283" belowLine="567" aboveLine="850"/><hp:numbering type="CONTINUOUS" newNum="1"/><hp:placement place="EACH_COLUMN" beneathText="0"/></hp:footNotePr><hp:endNotePr><hp:autoNumFormat type="DIGIT" userChar="" prefixChar="" suffixChar=")" supscript="0"/><hp:noteLine length="14692344" type="SOLID" width="0.12 mm" color="#000000"/><hp:noteSpacing betweenNotes="0" belowLine="567" aboveLine="850"/><hp:numbering type="CONTINUOUS" newNum="1"/><hp:placement place="END_OF_DOCUMENT" beneathText="0"/></hp:endNotePr><hp:pageBorderFill type="BOTH" borderFillIDRef="1" textBorder="PAPER" headerInside="0" footerInside="0" fillArea="PAPER"><hp:offset left="1417" right="1417" top="1417" bottom="1417"/></hp:pageBorderFill><hp:pageBorderFill type="EVEN" borderFillIDRef="1" textBorder="PAPER" headerInside="0" footerInside="0" fillArea="PAPER"><hp:offset left="1417" right="1417" top="1417" bottom="1417"/></hp:pageBorderFill><hp:pageBorderFill type="ODD" borderFillIDRef="1" textBorder="PAPER" headerInside="0" footerInside="0" fillArea="PAPER"><hp:offset left="1417" right="1417" top="1417" bottom="1417"/></hp:pageBorderFill></hp:secPr><hp:ctrl><hp:colPr id="" type="NEWSPAPER" layout="LEFT" colCount="1" sameSz="1" sameGap="0"/></hp:ctrl></hp:run><hp:run charPrIDRef="0"><hp:t/></hp:run></hp:p>`;
+
+  // 기본 정보 표
+  const iCW=[12000,30520], iRH=2300;
+  const infoItems=[['문화재명',d.heritageName],['작업일자',d.workDate],['팀 명',d.teamName],['작업자명',d.workerName],['작업 유형',d.workType],['작업 종류',d.workCategory]];
+  const infoTrs=infoItems.map(([lbl,val],ri)=>`<hp:tr>${cell(lbl,0,ri,1,1,iCW[0],iRH,3,1,4)}${cell(val||'',1,ri,1,1,iCW[1],iRH,1,1,3)}</hp:tr>`).join('');
+  const infoTable=tbl(infoTrs,iCW,Array(infoItems.length).fill(iRH));
+
+  // 위험성 평가 표
+  const rCW=[11000,6520,18000,7000], rTH=2800, rHH=2300, rRH=2500;
+  const riskTables=d.sections.map(sec=>{
+    const totalW=rCW.reduce((a,b)=>a+b,0);
+    const colHdrs=['위험 요인','위험도','감소 대책','조치 여부'];
+    let trs=`<hp:tr>${cell(sec.name,0,0,4,1,totalW,rTH,0,1,4)}</hp:tr>`;
+    trs+=`<hp:tr>${colHdrs.map((h,ci)=>cell(h,ci,1,1,1,rCW[ci],rHH,3,1,4)).join('')}</hp:tr>`;
+    sec.items.forEach((it,ri)=>{
+      trs+=`<hp:tr>${cell(it.factor,0,ri+2,1,1,rCW[0],rRH,1,1,3)}${cell(it.risk||'-',1,ri+2,1,1,rCW[1],rRH,3,1,3)}${cell(it.measure||'-',2,ri+2,1,1,rCW[2],rRH,1,1,3)}${cell(it.status||'-',3,ri+2,1,1,rCW[3],rRH,1,1,3)}</hp:tr>`;
+    });
+    return tbl(trs,rCW,[rTH,rHH,...Array(sec.items.length).fill(rRH)]);
+  });
+
+  // 특이사항 표 (2행 1열, borderFillIDRef=5)
+  const rmkW=41954, rmkH1=4145, rmkH2=9173;
+  function cellRmk(text,row,cp,rh){
+    return `<hp:tc name="" header="0" hasMargin="0" protect="0" editable="0" dirty="0" borderFillIDRef="5"><hp:subList id="" textDirection="HORIZONTAL" lineWrap="BREAK" vertAlign="CENTER" linkListIDRef="0" linkListNextIDRef="0" textWidth="0" textHeight="0" hasTextRef="0" hasNumRef="0"><hp:p id="${npid()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="${cp}"><hp:t>${xe(text)}</hp:t></hp:run></hp:p></hp:subList><hp:cellAddr colAddr="0" rowAddr="${row}"/><hp:cellSpan colSpan="1" rowSpan="1"/><hp:cellSz width="${rmkW}" height="${rh}"/><hp:cellMargin left="510" right="510" top="141" bottom="141"/></hp:tc>`;
+  }
+  const rmkTrs=`<hp:tr>${cellRmk('▣ 특이사항·종합 의견',0,3,rmkH1)}</hp:tr><hp:tr>${cellRmk(d.remarks||'(없음)',1,1,rmkH2)}</hp:tr>`;
+  const rmkTable=`<hp:p id="${npid()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:tbl id="${npid()}" zOrder="6" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="1" rowCnt="2" colCnt="1" cellSpacing="0" borderFillIDRef="5" noAdjust="0"><hp:sz width="${rmkW}" widthRelTo="ABSOLUTE" height="${rmkH1+rmkH2}" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:inMargin left="510" right="510" top="141" bottom="141"/>${rmkTrs}</hp:tbl></hp:run></hp:p>`;
+
+  // 제목 (항상 단순 텍스트)
+  const titleBlock=textP('전남 동부 문화유산 돌봄작업 위험성 평가표',2,0);
+
+  // ── 하단 서명란 ── 작업자가 있을 때만 생성
+  const _workers = d.selectedWorkersArr || [];
+  const _sigMap  = d.sigMap || {};
+  const _binFmt  = (n)=>`BIN${String(n).padStart(4,'0')}`;
+
+  const sigParts = [];
+  if(_workers.length){
+    const N=_workers.length;
+    const totalW=42520;
+    const baseW=Math.floor(totalW/N);
+    const colWidths=Array.from({length:N},(_,i)=>i===N-1?totalW-baseW*(N-1):baseW);
+    const nameH=2500, sigH=3000;
+
+    // 이름 행(파란 배경) + 서명: 텍스트 행 — 표 안에는 텍스트만
+    const nameRow=`<hp:tr>${_workers.map((n,ci)=>cell(n,ci,0,1,1,colWidths[ci],nameH,3,1,4)).join('')}</hp:tr>`;
+    const sigRow =`<hp:tr>${_workers.map((_,ci)=>cell('서명:',ci,1,1,1,colWidths[ci],sigH,0,1,3)).join('')}</hp:tr>`;
+    sigParts.push(tbl(nameRow+sigRow,colWidths,[nameH,sigH]));
+
+    // 서명 이미지 — 표 밖 일반 단락에 배치 (표 셀 밖에서만 hp:pic 동작)
+    const sigWorkers=_workers.filter(n=>_sigMap[n]);
+    if(sigWorkers.length){
+      sigParts.push(blankP());
+      sigWorkers.forEach(name=>{
+        const binId=_sigMap[name];          // 1,2,3...
+        const ref  =_binFmt(binId);         // "BIN0001", "BIN0002"...
+        const imgW =12000;                  // 약 42.3mm
+        const imgH =Math.round(imgW*180/420); // canvas 420×180 비율
+        sigParts.push(textP(name+' 서명:',3,0));
+        const picPid=npid(), picId=npid(), capPid=npid();
+        sigParts.push(
+          `<hp:p id="${picPid}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">` +
+          `<hp:run charPrIDRef="0">` +
+          `<hp:pic id="${picId}" name="그림 ${binId}" zOrder="${binId}" numberingType="PICTURE"` +
+          ` textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None">` +
+          `<hp:inst binData="${ref}" flip="NONE">` +
+          `<hp:img imgContourCheck="0" imgEditType="REALPATH" imgEditEffect="0"/>` +
+          `</hp:inst>` +
+          `<hp:sz width="${imgW}" height="${imgH}" protect="0"/>` +
+          `<hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0"` +
+          ` holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN"` +
+          ` vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/>` +
+          `<hp:outMargin left="0" right="0" top="0" bottom="0"/>` +
+          `<hp:caption>` +
+          `<hp:subList id="" textDirection="HORIZONTAL" lineWrap="BREAK" vertAlign="CENTER"` +
+          ` linkListIDRef="0" linkListNextIDRef="0" textWidth="${imgW}" textHeight="0" hasTextRef="0" hasNumRef="0">` +
+          `<hp:p id="${capPid}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">` +
+          `<hp:run charPrIDRef="0"><hp:t/></hp:run>` +
+          `</hp:p>` +
+          `</hp:subList>` +
+          `<hp:sz width="${imgW}" height="0" protect="0"/>` +
+          `<hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0"` +
+          ` holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN"` +
+          ` vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/>` +
+          `<hp:outMargin left="0" right="0" top="0" bottom="0"/>` +
+          `<hp:captionAttr side="BOTTOM" fullSz="0" lineGap="850" indentSz="0" maxSz="0"/>` +
+          `</hp:caption>` +
+          `</hp:pic>` +
+          `</hp:run>` +
+          `</hp:p>`
+        );
+        sigParts.push(blankP());
+      });
+    }
+  }
+
+  const parts=[
+    secPr,
+    titleBlock,
+    blankP(), infoTable, blankP(),
+    ...riskTables.flatMap(t=>[t,blankP()]),
+    rmkTable,
+    ...(sigParts.length?[blankP(),...sigParts]:[])
+  ];
+  return `<?xml version='1.0' encoding='UTF-8'?>\n<hs:sec ${NS}>\n${parts.join('\n')}\n</hs:sec>`;
+}
+
+function collectHwpxData(){
+  const wtTypes=[];
+  if(document.getElementById('wt_daily').checked) wtTypes.push('일상관리');
+  if(document.getElementById('wt_minor').checked) wtTypes.push('경미수리');
+  const d={
+    heritageName: document.getElementById('heritageName').value,
+    workDate: (()=>{
+      const v=document.getElementById('workDate').value;
+      if(!v) return '';
+      const days=['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+      const dow=days[new Date(v+'T00:00:00').getDay()];
+      return `${v}, ${dow}`;
+    })(),
+    teamName: document.getElementById('teamName').value,
+    workerName: document.getElementById('workerName').value,
+    workType: wtTypes.join(', '),
+    workCategory: document.getElementById('workCategory').value,
+    remarks: document.getElementById('remarks').value,
+    sections:[]
+  };
+  riskData.forEach((sec,si)=>{
+    const items=[];
+    sec.items.forEach((factor,idx)=>{
+      const tr=document.getElementById(`r${sec.id}_${idx}`);
+      const rm={high:'상',mid:'중',low:'하'};
+      items.push({
+        factor,
+        risk: rm[tr?.dataset?.risk]||'-',
+        measure: getMeasureValue(tr)||'-',
+        status: tr?.dataset?.status==='done'?'완료':tr?.dataset?.status==='undone'?'미완료':'-'
+      });
+    });
+    d.sections.push({name:sectionNames[si],items});
+  });
+  return d;
+}
+
+/* ──── PDF 저장 ──── */
+function buildPdfHtml(d, sigEntries){
+  const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const riskSt=r=>r==='상'?'background:#FDECEA;color:#C0392B;font-weight:700;'
+                  :r==='중'?'background:#FEF5E4;color:#D97B1A;font-weight:700;'
+                  :r==='하'?'background:#EAFAF1;color:#27AE60;font-weight:700;':'';
+  let h=`<style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Malgun Gothic','맑은 고딕','Apple SD Gothic Neo',sans-serif;font-size:12px;color:#111;background:#fff;}
+    h1{text-align:center;font-size:17px;font-weight:700;letter-spacing:1px;margin-bottom:14px;border-bottom:2px solid #5C3D2E;padding-bottom:8px;}
+    table{width:100%;border-collapse:collapse;margin-bottom:10px;font-size:11.5px;}
+    th,td{border:1px solid #666;padding:5px 7px;vertical-align:middle;}
+    .sec-hdr{background:#5C3D2E;color:#fff;font-weight:700;text-align:center;font-size:12px;}
+    .col-hdr{background:#DAEEF3;font-weight:700;text-align:center;}
+    .info-lbl{background:#F0E6CC;font-weight:700;width:20%;text-align:center;}
+    .rmk-lbl{background:#F0E6CC;font-weight:700;}
+    .sig-wrap{margin-top:16px;border-top:2px solid #333;padding-top:12px;}
+    .sig-title{font-weight:700;font-size:13px;margin-bottom:10px;}
+    .sig-grid{display:flex;gap:10px;flex-wrap:wrap;}
+    .sig-cell{flex:1;min-width:130px;border:1px solid #666;padding:8px;text-align:center;}
+    .sig-cell-name{font-weight:700;font-size:12px;background:#DAEEF3;padding:4px 6px;margin-bottom:6px;}
+    .sig-img{width:100%;height:68px;object-fit:contain;display:block;border-bottom:1px solid #999;margin-bottom:4px;}
+    .sig-blank{height:68px;border-bottom:1px solid #999;margin-bottom:4px;}
+    .sig-label{font-size:10px;color:#666;}
+    tr{page-break-inside:avoid;break-inside:avoid;}
+    table{page-break-inside:auto;}
+    thead{display:table-header-group;}
+  </style>`;
+  h+=`<h1>전남 동부 문화유산 돌봄작업 위험성 평가표</h1>`;
+  h+=`<table>
+    <tr><td class="info-lbl">문화재명</td><td>${esc(d.heritageName)}</td><td class="info-lbl">작업일자</td><td>${esc(d.workDate)}</td></tr>
+    <tr><td class="info-lbl">팀 명</td><td>${esc(d.teamName)}</td><td class="info-lbl">작업자명</td><td>${esc(d.workerName)}</td></tr>
+    <tr><td class="info-lbl">작업 유형</td><td>${esc(d.workType)}</td><td class="info-lbl">작업 종류</td><td>${esc(d.workCategory)}</td></tr>
+  </table>`;
+  d.sections.forEach(sec=>{
+    h+=`<table>
+      <tr><td colspan="4" class="sec-hdr">${esc(sec.name)}</td></tr>
+      <tr>
+        <td class="col-hdr" style="width:29%">위험 요인</td>
+        <td class="col-hdr" style="width:9%">위험도</td>
+        <td class="col-hdr" style="width:43%">감소 대책</td>
+        <td class="col-hdr" style="width:19%">조치 여부</td>
+      </tr>`;
+    sec.items.forEach(it=>{
+      h+=`<tr>
+        <td>${esc(it.factor)}</td>
+        <td style="text-align:center;${riskSt(it.risk)}">${esc(it.risk)}</td>
+        <td>${esc(it.measure)}</td>
+        <td style="text-align:center;">${esc(it.status)}</td>
+      </tr>`;
+    });
+    h+=`</table>`;
+  });
+  h+=`<table>
+    <tr><td class="rmk-lbl">▣ 특이사항·종합 의견</td></tr>
+    <tr><td style="min-height:55px;white-space:pre-wrap;word-break:break-all;">${esc(d.remarks||'(없음)')}</td></tr>
+  </table>`;
+  if(sigEntries.length>0){
+    h+=`<div class="sig-wrap"><div class="sig-title">■ 서명란</div><div class="sig-grid">`;
+    sigEntries.forEach(e=>{
+      h+=`<div class="sig-cell"><div class="sig-cell-name">${esc(e.name)}</div>`;
+      if(e.dataUrl) h+=`<img class="sig-img" src="${e.dataUrl}">`;
+      else          h+=`<div class="sig-blank"></div>`;
+      h+=`<div class="sig-label">서명</div></div>`;
+    });
+    h+=`</div></div>`;
+  }
+  return h;
+}
+
+async function doPDF(){
+  if(typeof html2canvas==='undefined'||typeof window.jspdf==='undefined'){
+    alert('PDF 라이브러리를 불러올 수 없습니다.\n인터넷 연결을 확인하고 페이지를 새로고침해 주세요.');
+    return;
+  }
+  const d=collectHwpxData();
+  const dateStr=(d.workDate||new Date().toISOString().slice(0,10)).replace(/[^0-9]/g,'').slice(0,8);
+  const fileName=`${d.heritageName||'위험성평가'}_${dateStr}.pdf`;
+
+  const _selWorkers=workerList.filter(n=>selectedWorkers.has(n));
+  const sigEntries=_selWorkers.map(n=>({name:n,dataUrl:workerSignatures[n]||null}));
+
+  // ── position:absolute (not fixed) — html2canvas가 고정 요소를 뷰포트 기준으로
+  //    잘못 캡처하는 문제 방지. left:-9999px 로 화면 밖에 배치.
+  const wrap=document.createElement('div');
+  wrap.style.cssText='position:absolute;top:0;left:-9999px;width:794px;background:#fff;padding:28px 32px;color:#111;';
+  document.body.appendChild(wrap);
+  wrap.innerHTML=buildPdfHtml(d,sigEntries);
+
+  // 서명 이미지(data-URL) 로드 완료 대기
+  await Promise.all([...wrap.querySelectorAll('img')].map(img=>
+    img.complete?Promise.resolve():new Promise(r=>{img.onload=r;img.onerror=r;})
+  ));
+  // 레이아웃 확정 대기 (2 프레임)
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+
+  try{
+    const SCALE=2;
+
+    // ── ① 행·표 위치 수집 ──────────────────────────────────────────
+    // position:absolute 이므로 getBoundingClientRect는 스크롤 영향을 받음
+    // → scrollY를 더해 문서 절대 좌표로 변환한 뒤 상대 위치 계산
+    const sy=window.pageYOffset||document.documentElement.scrollTop;
+    const wTop=wrap.getBoundingClientRect().top+sy;  // wrap 문서 절대 top
+
+    const toBounds=el=>{
+      const r=el.getBoundingClientRect();
+      return{
+        top:Math.round((r.top +sy-wTop)*SCALE),
+        bot:Math.round((r.bottom+sy-wTop)*SCALE)
+      };
+    };
+
+    // 표(table) 전체 경계 — 페이지 경계에 걸리면 표 전체를 다음 페이지로 이동
+    const tableBounds=[...wrap.querySelectorAll('table')]
+      .map(toBounds).sort((a,b)=>a.top-b.top);
+
+    // 행(tr) 경계 — 표가 너무 길어 한 페이지에 못 들어갈 때 행 단위 분리용
+    const rowBounds=[...wrap.querySelectorAll('tr')]
+      .map(toBounds).sort((a,b)=>a.top-b.top);
+
+    // ── ② 전체 페이지 렌더링 ─────────────────────────────────────────
+    // scrollY 보정: html2canvas가 현재 스크롤 위치를 캔버스 좌표에 반영하지 않도록
+    const canvas=await html2canvas(wrap,{
+      scale:SCALE,
+      useCORS:true,
+      backgroundColor:'#ffffff',
+      logging:false,
+      scrollX:0,
+      scrollY:-sy   // 스크롤된 만큼 위로 이동해 wrap 전체가 캡처되도록
+    });
+    document.body.removeChild(wrap);
+
+    const imgW=canvas.width, imgH=canvas.height;
+    const A4W=210, A4H=297;
+    // A4 높이를 캔버스 픽셀로 환산
+    const pageHpx=Math.floor(imgW/A4W*A4H);
+
+    // ── ③ 표·행 경계 기준 페이지 분리점(cuts) 계산 ──────────────────
+    // 우선순위:
+    //   1) idealY에 걸친 표가 현재 페이지 내에서 시작됐으면 → 표 top으로 컷
+    //      (표 전체를 다음 페이지로 넘김)
+    //   2) 표가 페이지보다 커서 이동 불가면 → 걸친 행의 top으로 컷
+    //      (행이 잘리지 않게만 보장)
+    function findSafeCut(idealY, prevY){
+      if(idealY>=imgH) return imgH;
+
+      // ─ 표 단위 검사: 표가 idealY에 걸치면 표 시작으로 컷 이동 ─
+      for(const tb of tableBounds){
+        if(tb.top>=idealY) break;          // 이 표는 컷 이후 → 이상 없음
+        if(tb.bot>idealY){
+          // 이 표가 idealY에 걸쳐 있음
+          if(tb.top>prevY){
+            // 표가 현재 페이지 안에서 시작 → 표 전체를 다음 페이지로
+            return tb.top;
+          }
+          // 표가 이전 컷과 같거나 이전에 시작 (표 자체가 한 페이지를 초과)
+          // → 행 단위로 처리 (아래로 fall-through)
+          break;
+        }
+      }
+
+      // ─ 행 단위 검사: 행이 idealY에 걸치면 행 top으로 컷 ─
+      for(const rb of rowBounds){
+        if(rb.top>=idealY) break;          // 정렬됐으므로 이후 행은 모두 idealY 이후
+        if(rb.bot>idealY) return rb.top;   // 이 행이 걸침 → 행 시작으로 컷
+      }
+
+      return idealY; // 행·표 사이 공백 — 그대로 사용
+    }
+
+    const cuts=[0];
+    while(cuts[cuts.length-1]<imgH){
+      const prev=cuts[cuts.length-1];
+      const ideal=prev+pageHpx;
+      if(ideal>=imgH){ cuts.push(imgH); break; }
+      const safe=findSafeCut(ideal, prev);
+      // 안전점이 이전 컷과 같으면(표/행이 페이지보다 큰 경우) 강제로 idealY 사용
+      cuts.push(safe>prev ? safe : ideal);
+    }
+
+    // ── ④ 각 페이지 구간을 독립 캔버스로 잘라 PDF에 추가 ────────────
+    const{jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+
+    for(let i=0;i<cuts.length-1;i++){
+      const y0=cuts[i], y1=cuts[i+1];
+      const segH=y1-y0;
+
+      const seg=document.createElement('canvas');
+      seg.width=imgW; seg.height=segH;
+      const ctx=seg.getContext('2d');
+      ctx.fillStyle='#ffffff';
+      ctx.fillRect(0,0,imgW,segH);
+      // 원본 캔버스에서 해당 구간만 복사
+      ctx.drawImage(canvas, 0,y0, imgW,segH, 0,0, imgW,segH);
+
+      const segMmH=(segH/imgW)*A4W;
+      if(i>0) pdf.addPage();
+      pdf.addImage(seg.toDataURL('image/jpeg',0.93),'JPEG',0,0,A4W,segMmH);
+    }
+
+    // ── ⑤ 저장 (iOS 별도 처리) ──────────────────────────────────────
+    const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||
+      (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+    if(isIOS){
+      const blob=pdf.output('blob');
+      const file=new File([blob],fileName,{type:'application/pdf'});
+      if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+        try{ await navigator.share({files:[file],title:fileName}); return; }
+        catch(e){ if(e.name==='AbortError') return; }
+      }
+      const url=URL.createObjectURL(blob);
+      window.open(url,'_blank');
+      setTimeout(()=>URL.revokeObjectURL(url),60000);
+      alert('파일 링크가 열렸습니다.\n공유 버튼(□↑) → "파일에 저장"을 선택하세요.');
+    } else {
+      pdf.save(fileName);
+    }
+  } catch(err){
+    if(document.body.contains(wrap)) document.body.removeChild(wrap);
+    console.error(err);
+    alert('PDF 생성 중 오류가 발생했습니다.\n'+err.message);
+  }
+}
+
+async function doHWPX(){
+  if(typeof JSZip==='undefined'){
+    alert('JSZip 라이브러리를 불러올 수 없습니다.\n인터넷 연결을 확인하고 페이지를 새로고침해 주세요.');
+    return;
+  }
+  const d=collectHwpxData();
+  const dateStr=(d.workDate||new Date().toISOString().slice(0,10)).replace(/-/g,'');
+  const fileName=`${d.heritageName||'위험성평가'}_${dateStr}.hwpx`;
+
+  // 체크된 작업자 + 저장된 서명 수집
+  const _selWorkers=workerList.filter(n=>selectedWorkers.has(n));
+  const _bf=(n)=>`BIN${String(n).padStart(4,'0')}`;
+  const _sigEntries=[];
+  _selWorkers.forEach(name=>{
+    const sig=workerSignatures[name];
+    if(sig&&sig.startsWith('data:image'))
+      _sigEntries.push({name,binId:_sigEntries.length+1,dataUrl:sig});
+  });
+  const _sigMap={};
+  _selWorkers.forEach(name=>{
+    const e=_sigEntries.find(x=>x.name===name);
+    _sigMap[name]=e?e.binId:null;
+  });
+  d.selectedWorkersArr=_selWorkers;
+  d.sigMap=_sigMap;
+
+  // ★ container.xml: container.rdf rootfile 참조 포함 (base 템플릿 동일 구조)
+  const containerXml=`<?xml version='1.0' encoding='UTF-8'?><ocf:container xmlns:ocf="urn:oasis:names:tc:opendocument:xmlns:container" xmlns:hpf="http://www.hancom.co.kr/schema/2011/hpf"><ocf:rootfiles><ocf:rootfile full-path="Contents/content.hpf" media-type="application/hwpml-package+xml"/><ocf:rootfile full-path="Preview/PrvText.txt" media-type="text/plain"/><ocf:rootfile full-path="META-INF/container.rdf" media-type="application/rdf+xml"/></ocf:rootfiles></ocf:container>`;
+  // ★ container.rdf: 문서 구조 메타데이터 (한글 파서가 요구)
+  const containerRdf=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about=""><ns0:hasPart xmlns:ns0="http://www.hancom.co.kr/hwpml/2016/meta/pkg#" rdf:resource="Contents/header.xml"/></rdf:Description><rdf:Description rdf:about="Contents/header.xml"><rdf:type rdf:resource="http://www.hancom.co.kr/hwpml/2016/meta/pkg#HeaderFile"/></rdf:Description><rdf:Description rdf:about=""><ns0:hasPart xmlns:ns0="http://www.hancom.co.kr/hwpml/2016/meta/pkg#" rdf:resource="Contents/section0.xml"/></rdf:Description><rdf:Description rdf:about="Contents/section0.xml"><rdf:type rdf:resource="http://www.hancom.co.kr/hwpml/2016/meta/pkg#SectionFile"/></rdf:Description><rdf:Description rdf:about=""><rdf:type rdf:resource="http://www.hancom.co.kr/hwpml/2016/meta/pkg#Document"/></rdf:Description></rdf:RDF>`;
+  // ★ content.hpf manifest에는 BinData 항목 절대 미포함 — header.xml hh:binDataList로만 처리
+  const contentHpf=`<?xml version='1.0' encoding='UTF-8'?><opf:package xmlns:ha="http://www.hancom.co.kr/hwpml/2011/app" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph" xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hc="http://www.hancom.co.kr/hwpml/2011/core" xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head" xmlns:hpf="http://www.hancom.co.kr/schema/2011/hpf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf/" version="" unique-identifier="" id=""><opf:metadata><opf:title>${xe(d.heritageName)} 위험성평가</opf:title><opf:language>ko</opf:language><opf:meta name="creator" content="${xe(d.workerName)}"/><opf:meta name="subject" content="text"/><opf:meta name="description" content="text"/><opf:meta name="lastsaveby" content="text"/><opf:meta name="CreatedDate" content="${xe(d.workDate)}"/><opf:meta name="ModifiedDate" content="text"/><opf:meta name="date" content="text"/><opf:meta name="keyword" content="text"/></opf:metadata><opf:manifest><opf:item id="header" href="Contents/header.xml" media-type="application/xml"/><opf:item id="section0" href="Contents/section0.xml" media-type="application/xml"/><opf:item id="settings" href="settings.xml" media-type="application/xml"/></opf:manifest><opf:spine><opf:itemref idref="header" linear="yes"/><opf:itemref idref="section0" linear="yes"/></opf:spine></opf:package>`;
+  const versionXml=`<?xml version='1.0' encoding='UTF-8'?><hv:HCFVersion xmlns:hv="http://www.hancom.co.kr/hwpml/2011/version" tagetApplication="WORDPROCESSOR" major="5" minor="1" micro="1" buildNumber="0" os="1" xmlVersion="1.5" application="Hancom Office Hangul" appVersion="13, 0, 0, 1408 WIN32LEWindows_10"/>`;
+  const settingsXml=`<?xml version='1.0' encoding='UTF-8'?><ha:HWPApplicationSetting xmlns:ha="http://www.hancom.co.kr/hwpml/2011/app" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0"><ha:CaretPosition listIDRef="0" paraIDRef="0" pos="0"/></ha:HWPApplicationSetting>`;
+  const manifestXml=`<?xml version='1.0' encoding='UTF-8'?><odf:manifest xmlns:odf="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"/>`;
+  const prvText=`문화재돌봄 작업 위험성 평가표\n문화재명: ${d.heritageName}\n작업일자: ${d.workDate}\n작업자명: ${d.workerName}`;
+
+  const zip=new JSZip();
+  zip.file('mimetype','application/hwp+zip',{compression:'STORE'});
+  zip.file('META-INF/container.xml',containerXml);
+  zip.file('META-INF/container.rdf',containerRdf);
+  zip.file('META-INF/manifest.xml',manifestXml);
+  zip.file('version.xml',versionXml);
+  zip.file('settings.xml',settingsXml);
+  zip.file('Contents/content.hpf',contentHpf);
+  // 서명 PNG → ZIP의 BinData/ 폴더 (STORE 압축, compress="0" 와 일치)
+  _sigEntries.forEach((s,i)=>zip.file(`BinData/sig${i}.png`,b64ToUint8(s.dataUrl),{compression:'STORE'}));
+  zip.file('Contents/header.xml',getHeaderXml(_sigEntries.length));
+  zip.file('Contents/section0.xml',genSection0(d));
+  zip.file('Preview/PrvText.txt',prvText);
+
+  // ZIP 바이너리를 octet-stream Blob으로 래핑 → 브라우저/OS가 ZIP으로 인식하지 않도록
+  const data=await zip.generateAsync({type:'uint8array',compression:'DEFLATE'});
+  const blob=new Blob([data],{type:'application/octet-stream'});
+
+  // iOS (iPhone / iPad / iPadOS 13+) 감지
+  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||
+    (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+
+  if(isIOS){
+    const file=new File([blob],fileName,{type:'application/octet-stream'});
+    // iOS 15+ : Web Share API로 파일 공유 → "파일에 저장" 선택
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({files:[file],title:fileName});
+        return;
+      }catch(e){
+        if(e.name==='AbortError') return;
+      }
+    }
+    // 폴백: 새 탭으로 열기
+    const url=URL.createObjectURL(blob);
+    window.open(url,'_blank');
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
+    alert('파일 링크가 열렸습니다.\n화면 하단 공유 버튼(□↑) → "파일에 저장"을 선택하세요.');
+    return;
+  }
+
+  // Android / 데스크톱 : 표준 다운로드
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=fileName;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+/* ──── 오늘 날짜 기본값 ──── */
+function setToday() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  document.getElementById('workDate').value = `${y}-${m}-${day}`;
+}
+
+/* ──── 작업자명 드롭다운 관리 ──── */
+const WORKER_KEY = 'workerList_v1';
+let workerList = [];          // 인메모리 source-of-truth
+let selectedWorkers = new Set();
+/* 서명 저장소 (선언을 앞에 두어 renderWorkerList에서 참조 가능하게) */
+const SIG_KEY = 'workerSignatures_v1';
+let workerSignatures = {};
+
+function _wLoad() {
+  try { workerList = JSON.parse(localStorage.getItem(WORKER_KEY)) || []; }
+  catch(e) { workerList = []; }
+}
+function _wSave() {
+  try { localStorage.setItem(WORKER_KEY, JSON.stringify(workerList)); } catch(e) {}
+}
+
+function renderWorkerList() {
+  const container = document.getElementById('workerListItems');
+  if (!workerList.length) {
+    container.innerHTML = '<div class="worker-empty">등록된 작업자가 없습니다</div>';
+    return;
+  }
+  container.innerHTML = workerList.map(name => {
+    const safe = name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    const checked = selectedWorkers.has(name) ? 'checked' : '';
+    const hasSig = !!workerSignatures[name];
+    const sigBtnStyle = hasSig ? 'background:#27AE60;color:#fff;' : '';
+    const sigBtnLabel = hasSig ? '재서명' : '서명';
+    return `<div class="worker-item">
+      <input type="checkbox" class="worker-cb" ${checked}
+        onchange="toggleWorkerSelect('${safe}',this.checked)">
+      <span class="worker-name" onclick="toggleWorkerSelectByName('${safe}')">${name}</span>
+      <button type="button" class="worker-btn worker-btn-sig" style="${sigBtnStyle}" title="${hasSig?'서명 수정':'서명하기'}" onclick="openSigModal('${safe}')">${sigBtnLabel}</button>
+      <button type="button" class="worker-btn worker-btn-edit" title="수정" onclick="editWorker('${safe}')">✏</button>
+      <button type="button" class="worker-btn worker-btn-del" title="삭제" onclick="deleteWorker('${safe}')">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function toggleWorkerDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('workerDropdown');
+  const disp = document.getElementById('workerDisplay');
+  const isOpen = dd.style.display !== 'none';
+  dd.style.display = isOpen ? 'none' : 'block';
+  disp.classList.toggle('open', !isOpen);
+  if (!isOpen) {
+    renderWorkerList();
+    setTimeout(() => document.getElementById('workerAddInput').focus(), 50);
+  }
+}
+
+function toggleWorkerSelect(name, checked) {
+  if (checked) selectedWorkers.add(name);
+  else selectedWorkers.delete(name);
+  updateWorkerDisplay();
+}
+
+function toggleWorkerSelectByName(name) {
+  if (selectedWorkers.has(name)) selectedWorkers.delete(name);
+  else selectedWorkers.add(name);
+  renderWorkerList();
+  updateWorkerDisplay();
+}
+
+function updateWorkerDisplay() {
+  // 삭제된 이름은 선택 해제
+  for (const n of [...selectedWorkers]) {
+    if (!workerList.includes(n)) selectedWorkers.delete(n);
+  }
+  const txt = document.getElementById('workerDisplayText');
+  const hidden = document.getElementById('workerName');
+  const selected = workerList.filter(n => selectedWorkers.has(n));
+  if (selected.length === 0) {
+    txt.textContent = '-- 선택 또는 추가 --';
+    txt.classList.add('ph');
+    hidden.value = '';
+  } else {
+    txt.textContent = selected.join(', ');
+    txt.classList.remove('ph');
+    hidden.value = selected.join(', ');
+  }
+}
+
+function addWorker() {
+  const input = document.getElementById('workerAddInput');
+  const name = input.value.trim();
+  if (!name) return;
+  if (workerList.includes(name)) { alert('이미 등록된 이름입니다.'); return; }
+  workerList.push(name);
+  _wSave();
+  selectedWorkers.add(name);
+  input.value = '';
+  renderWorkerList();
+  updateWorkerDisplay();
+  input.focus();
+}
+
+function editWorker(name) {
+  const idx = workerList.indexOf(name);
+  if (idx === -1) return;
+  const newName = prompt('이름 수정:', name);
+  if (!newName || !newName.trim() || newName.trim() === name) return;
+  if (workerList.includes(newName.trim())) { alert('이미 존재하는 이름입니다.'); return; }
+  workerList[idx] = newName.trim();
+  _wSave();
+  if (selectedWorkers.has(name)) {
+    selectedWorkers.delete(name);
+    selectedWorkers.add(newName.trim());
+  }
+  if (workerSignatures[name]) {
+    workerSignatures[newName.trim()] = workerSignatures[name];
+    delete workerSignatures[name];
+    _sigSave();
+  }
+  renderWorkerList();
+  updateWorkerDisplay();
+}
+
+function deleteWorker(name) {
+  if (!confirm(`"${name}"을(를) 목록에서 삭제하시겠습니까?`)) return;
+  workerList = workerList.filter(n => n !== name);
+  _wSave();
+  selectedWorkers.delete(name);
+  if (workerSignatures[name]) { delete workerSignatures[name]; _sigSave(); }
+  renderWorkerList();
+  updateWorkerDisplay();
+}
+
+document.addEventListener('click', function(e) {
+  [
+    ['workerSelector','workerDropdown','workerDisplay'],
+    ['teamSelector',  'teamDropdown',  'teamDisplay'],
+    ['catSelector',   'catDropdown',   'catDisplay'],
+  ].forEach(([sel, dd, disp]) => {
+    const s = document.getElementById(sel);
+    if (s && !s.contains(e.target)) {
+      document.getElementById(dd).style.display = 'none';
+      document.getElementById(disp).classList.remove('open');
+    }
+  });
+  // 서명 모달 외부 클릭 닫기
+  if (e.target === document.getElementById('sigModal')) closeSigModal();
+});
+
+/* ──── 서명 관리 ──── */
+let _sigCurrentWorker = null;
+let _sigDrawing = false, _sigLX = 0, _sigLY = 0;
+
+function _sigLoad() {
+  try { workerSignatures = JSON.parse(localStorage.getItem(SIG_KEY)) || {}; }
+  catch(e) { workerSignatures = {}; }
+}
+function _sigSave() {
+  try { localStorage.setItem(SIG_KEY, JSON.stringify(workerSignatures)); } catch(e) {}
+}
+
+function openSigModal(name) {
+  _sigCurrentWorker = name;
+  document.getElementById('sigModalTitle').textContent = name + ' 서명';
+  const canvas = document.getElementById('sigCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (workerSignatures[name]) {
+    const img = new Image();
+    img.onload = () => { ctx.drawImage(img, 0, 0, canvas.width, canvas.height); };
+    img.src = workerSignatures[name];
+  }
+  document.getElementById('sigModal').classList.add('open');
+}
+
+function closeSigModal() {
+  document.getElementById('sigModal').classList.remove('open');
+  _sigCurrentWorker = null;
+}
+
+function clearSigCanvas() {
+  const canvas = document.getElementById('sigCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function saveSig() {
+  if (!_sigCurrentWorker) return;
+  const canvas = document.getElementById('sigCanvas');
+  workerSignatures[_sigCurrentWorker] = canvas.toDataURL('image/png');
+  _sigSave();
+  closeSigModal();
+  renderWorkerList();
+}
+
+function _sigPos(canvas, e) {
+  const r = canvas.getBoundingClientRect();
+  const sx = canvas.width / r.width, sy = canvas.height / r.height;
+  const src = e.touches ? e.touches[0] : e;
+  return { x: (src.clientX - r.left) * sx, y: (src.clientY - r.top) * sy };
+}
+
+function initSigCanvas() {
+  const canvas = document.getElementById('sigCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = '#1a1a2e'; ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+  function start(e) {
+    e.preventDefault(); _sigDrawing = true;
+    const p = _sigPos(canvas, e); _sigLX = p.x; _sigLY = p.y;
+    ctx.beginPath(); ctx.arc(p.x, p.y, 1.2, 0, Math.PI*2);
+    ctx.fillStyle = '#1a1a2e'; ctx.fill();
+  }
+  function move(e) {
+    if (!_sigDrawing) return; e.preventDefault();
+    const p = _sigPos(canvas, e);
+    ctx.beginPath(); ctx.moveTo(_sigLX, _sigLY); ctx.lineTo(p.x, p.y); ctx.stroke();
+    _sigLX = p.x; _sigLY = p.y;
+  }
+  function end() { _sigDrawing = false; }
+
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  canvas.addEventListener('mouseup', end);
+  canvas.addEventListener('mouseleave', end);
+  canvas.addEventListener('touchstart', start, { passive: false });
+  canvas.addEventListener('touchmove',  move,  { passive: false });
+  canvas.addEventListener('touchend',   end);
+}
+
+/* ──── 팀 명 드롭다운 관리 ──── */
+const TEAM_KEY = 'teamList_v1';
+const DEFAULT_TEAMS = ['경미수리1팀','경미수리2팀','경미수리3팀','경미수리4팀','경미수리5팀'];
+let teamList = [];
+let selectedTeams = new Set();
+
+function _tLoad() {
+  try {
+    const stored = localStorage.getItem(TEAM_KEY);
+    teamList = stored !== null ? (JSON.parse(stored) || []) : [...DEFAULT_TEAMS];
+    if (!teamList.length) teamList = [...DEFAULT_TEAMS];
+    if (stored === null) _tSave();
+  } catch(e) { teamList = [...DEFAULT_TEAMS]; }
+}
+function _tSave() {
+  try { localStorage.setItem(TEAM_KEY, JSON.stringify(teamList)); } catch(e) {}
+}
+
+function renderTeamList() {
+  const container = document.getElementById('teamListItems');
+  if (!teamList.length) {
+    container.innerHTML = '<div class="worker-empty">등록된 팀이 없습니다</div>';
+    return;
+  }
+  container.innerHTML = teamList.map(name => {
+    const safe = name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    const checked = selectedTeams.has(name) ? 'checked' : '';
+    return `<div class="worker-item">
+      <input type="checkbox" class="worker-cb" ${checked}
+        onchange="toggleTeamSelect('${safe}',this.checked)">
+      <span class="worker-name" onclick="toggleTeamSelectByName('${safe}')">${name}</span>
+      <button type="button" class="worker-btn worker-btn-edit" title="수정" onclick="editTeam('${safe}')">✏</button>
+      <button type="button" class="worker-btn worker-btn-del" title="삭제" onclick="deleteTeam('${safe}')">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function toggleTeamDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('teamDropdown');
+  const disp = document.getElementById('teamDisplay');
+  const isOpen = dd.style.display !== 'none';
+  dd.style.display = isOpen ? 'none' : 'block';
+  disp.classList.toggle('open', !isOpen);
+  if (!isOpen) {
+    renderTeamList();
+    setTimeout(() => document.getElementById('teamAddInput').focus(), 50);
+  }
+}
+
+function toggleTeamSelect(name, checked) {
+  if (checked) selectedTeams.add(name);
+  else selectedTeams.delete(name);
+  updateTeamDisplay();
+}
+
+function toggleTeamSelectByName(name) {
+  if (selectedTeams.has(name)) selectedTeams.delete(name);
+  else selectedTeams.add(name);
+  renderTeamList();
+  updateTeamDisplay();
+}
+
+function updateTeamDisplay() {
+  for (const n of [...selectedTeams]) {
+    if (!teamList.includes(n)) selectedTeams.delete(n);
+  }
+  const txt = document.getElementById('teamDisplayText');
+  const hidden = document.getElementById('teamName');
+  const selected = teamList.filter(n => selectedTeams.has(n));
+  if (selected.length === 0) {
+    txt.textContent = '-- 선택 또는 추가 --';
+    txt.classList.add('ph');
+    hidden.value = '';
+  } else {
+    txt.textContent = selected.join(', ');
+    txt.classList.remove('ph');
+    hidden.value = selected.join(', ');
+  }
+}
+
+function addTeam() {
+  const input = document.getElementById('teamAddInput');
+  const name = input.value.trim();
+  if (!name) return;
+  if (teamList.includes(name)) { alert('이미 등록된 팀 명입니다.'); return; }
+  teamList.push(name);
+  _tSave();
+  selectedTeams.add(name);
+  input.value = '';
+  renderTeamList();
+  updateTeamDisplay();
+  input.focus();
+}
+
+function editTeam(name) {
+  const idx = teamList.indexOf(name);
+  if (idx === -1) return;
+  const newName = prompt('팀 명 수정:', name);
+  if (!newName || !newName.trim() || newName.trim() === name) return;
+  if (teamList.includes(newName.trim())) { alert('이미 존재하는 팀 명입니다.'); return; }
+  teamList[idx] = newName.trim();
+  _tSave();
+  if (selectedTeams.has(name)) { selectedTeams.delete(name); selectedTeams.add(newName.trim()); }
+  renderTeamList();
+  updateTeamDisplay();
+}
+
+function deleteTeam(name) {
+  if (!confirm(`"${name}"을(를) 목록에서 삭제하시겠습니까?`)) return;
+  teamList = teamList.filter(n => n !== name);
+  _tSave();
+  selectedTeams.delete(name);
+  renderTeamList();
+  updateTeamDisplay();
+}
+
+/* ──── 초기화 ──── */
+buildTables();
+setToday();
+_tLoad();
+_sigLoad();
+_wLoad();
+initSigCanvas();
+</script>
+</body>
+</html>
